@@ -4,8 +4,10 @@
 #include "tf_osc.hh"
 
 void init_tf_osc() {
-    static std::array<MetaModule::Element, 16> elements;
-    static std::array<ElementCount::Indices, 16> indices;
+    // 8 knobs in 4 rows of 2, then 6 jacks in 2 rows of 3, plus an LED.
+    // Panel is 14 HP wide (≈ 71 mm) so nothing clips.
+    static std::array<MetaModule::Element, 15> elements;
+    static std::array<ElementCount::Indices, 15> indices;
 
     auto knob = [](float x, float y, const char* name) {
         MetaModule::Knob k;
@@ -29,43 +31,40 @@ void init_tf_osc() {
         return j;
     };
 
-    // 10HP wide (≈50 mm). Two columns at x=15 / x=35.
-    elements[0]  = knob(15, 10, "Freq");        indices[0]  = {.param_idx = FreqKnobID};
-    elements[1]  = knob(35, 10, "Fine");        indices[1]  = {.param_idx = FineKnobID};
+    // Two knob columns at x = 22 and x = 49, four rows from y = 12 down.
+    elements[0]  = knob(22, 12, "Freq");        indices[0]  = {.param_idx = FreqKnobID};
+    elements[1]  = knob(49, 12, "Fine");        indices[1]  = {.param_idx = FineKnobID};
 
-    elements[2]  = knob(15, 25, "Morph X");     indices[2]  = {.param_idx = MorphXKnobID};
-    elements[3]  = knob(35, 25, "Morph Y");     indices[3]  = {.param_idx = MorphYKnobID};
+    elements[2]  = knob(22, 30, "Morph X");     indices[2]  = {.param_idx = MorphXKnobID};
+    elements[3]  = knob(49, 30, "Morph Y");     indices[3]  = {.param_idx = MorphYKnobID};
 
-    elements[4]  = knob(15, 40, "Warp");        indices[4]  = {.param_idx = WarpKnobID};
-    elements[5]  = knob(35, 40, "FM Amt");      indices[5]  = {.param_idx = FmAmtKnobID};
+    elements[4]  = knob(22, 48, "Warp");        indices[4]  = {.param_idx = WarpKnobID};
+    elements[5]  = knob(49, 48, "FM Amt");      indices[5]  = {.param_idx = FmAmtKnobID};
 
-    elements[6]  = knob(15, 55, "LFO Rate");    indices[6]  = {.param_idx = LfoRateKnobID};
-    elements[7]  = knob(35, 55, "LFO Depth");   indices[7]  = {.param_idx = LfoDepthKnobID};
+    elements[6]  = knob(22, 66, "LFO Rate");    indices[6]  = {.param_idx = LfoRateKnobID};
+    elements[7]  = knob(49, 66, "LFO Depth");   indices[7]  = {.param_idx = LfoDepthKnobID};
 
-    // Jacks row 1 (CV inputs).
-    elements[8]  = in_jack(10, 72, "X CV");     indices[8]  = {.input_idx = MorphXCvJackID};
-    elements[9]  = in_jack(25, 72, "Y CV");     indices[9]  = {.input_idx = MorphYCvJackID};
-    elements[10] = in_jack(40, 72, "FM In");    indices[10] = {.input_idx = FmInJackID};
+    // Jack rows at y = 84 and y = 100. Three columns at x = 12, 35, 58.
+    elements[8]  = in_jack(12, 84, "V/Oct");    indices[8]  = {.input_idx = VOctJackID};
+    elements[9]  = in_jack(35, 84, "Sync");     indices[9]  = {.input_idx = SyncJackID};
+    elements[10] = in_jack(58, 84, "FM In");    indices[10] = {.input_idx = FmInJackID};
 
-    // Jacks row 2 (gates / V/oct).
-    elements[11] = in_jack(10, 87, "V/Oct");    indices[11] = {.input_idx = VOctJackID};
-    elements[12] = in_jack(25, 87, "Sync");     indices[12] = {.input_idx = SyncJackID};
-    elements[13] = out_jack(40, 87, "Out");     indices[13] = {.output_idx = OutputJackID};
+    elements[11] = in_jack(12, 100, "X CV");    indices[11] = {.input_idx = MorphXCvJackID};
+    elements[12] = in_jack(35, 100, "Y CV");    indices[12] = {.input_idx = MorphYCvJackID};
+    elements[13] = out_jack(58, 100, "Out");    indices[13] = {.output_idx = OutputJackID};
 
+    // LED tucked above the first jack row, centered.
     MetaModule::MonoLight light;
-    light.x_mm = 25; light.y_mm = 100;
+    light.x_mm = 35; light.y_mm = 74;
     light.image = "TFExample/components/led.png";
     light.short_name = "Activity";
     elements[14] = light; indices[14] = {.light_idx = ActLightID};
 
-    // Padding slot (unused element) so the array size matches indices.
-    elements[15] = MetaModule::Knob{}; indices[15] = {};
-
     MetaModule::ModuleInfoView info{
         .description = "TFLite Micro neural wavetable morph",
-        .width_hp = 10,
-        .elements = std::span{elements.data(), 15},
-        .indices = std::span{indices.data(), 15},
+        .width_hp = 14,
+        .elements = elements,
+        .indices = indices,
     };
 
     MetaModule::register_module<TFOsc>("TFExample", "TFOsc", info,

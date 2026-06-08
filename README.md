@@ -17,6 +17,33 @@
 >
 > Use it as a starting point, not as a finished tool.
 
+## Download
+
+A pre-built **`.mmplugin`** for the MetaModule hardware lives at
+[`dist/TFExample.mmplugin`](dist/TFExample.mmplugin) (~330 KB).
+
+```bash
+# from the repo root, after cloning
+ls dist/TFExample.mmplugin
+# or download from the GitHub web UI once the repo is pushed
+```
+
+Copy it to the `metamodule-plugins/` folder on your MetaModule's SD card
+or USB drive, reboot, and **TFOsc** should show up in the module browser
+under the brand **TFExample**.
+
+> **Reminder:** the plugin compiles cleanly and runs in the simulator,
+> but **it has not been tested on real hardware yet.** Per-sample TFLM
+> inference at 48 kHz might overrun the Cortex-A7 audio budget. If it
+> does, the `kInferenceStride` constant in `tf_osc.hh` can be bumped
+> (4/8/16) to amortize the inference cost over multiple samples with
+> linear interpolation. See [docs/FUTURE_WORK.md](docs/FUTURE_WORK.md).
+
+Build details: `arm-none-eabi-gcc 12.3.1`, Cortex-A7 + NEON-VFPv4 +
+hard-float, `-O3`, text 244 KB / data 2.4 KB / bss 3.6 KB. To rebuild
+from source, see [*Quick start*](#quick-start) below or use the
+`/tfexample-build-sim hw` Claude skill.
+
 ## What this is
 
 The result is **TFOsc**, a neural wavetable-morph oscillator. A small SIREN
