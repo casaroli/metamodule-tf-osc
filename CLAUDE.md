@@ -21,7 +21,7 @@ not shipping a product.
 
 ## Where everything lives
 
-- **This plugin**: `/Users/marco/ia/metamodule/metamodule-plugin-examples/TFExample/`
+- **This plugin**: `./`
 - **MetaModule plugin SDK**: `../metamodule-plugin-sdk/`
 - **MetaModule firmware + simulator (cloned for sim use)**:
   `/Users/marco/ia/metamodule/metamodule/`
