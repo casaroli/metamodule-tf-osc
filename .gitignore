@@ -1,0 +1,21 @@
+# Build artifacts
+/build/
+/.cache/
+
+# Output plugins (parent dir, but include if someone clones standalone)
+../metamodule-plugins/TFExample.mmplugin
+
+# Training venv + caches
+/models/train/.venv/
+/models/train/__pycache__/
+/models/train/.pytest_cache/
+
+# Pytest caches
+/tests/__pycache__/
+/tests/.pytest_cache/
+
+# macOS
+.DS_Store
+
+# Demo output (rendered fresh on demand)
+/tmp/tfosc_samples/

@@ -1,0 +1,19 @@
+{
+  "slug": "TFExample",
+  "name": "TFExample",
+  "version": "1.0.0",
+  "license": "GPL-3.0-or-later",
+  "brand": "4msCompany",
+  "author": "Dan Green",
+  "modules": [
+    {
+      "slug": "TFOsc",
+      "name": "TF Oscillator",
+      "description": "TFLite Micro sine oscillator demo",
+      "tags": [
+        "Oscillator",
+        "VCO"
+      ]
+    }
+  ]
+}
